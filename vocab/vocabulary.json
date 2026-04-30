@@ -1,0 +1,22 @@
+[
+    {
+        "osnOblika" : "Auto",
+        "mnozina" : "Autos",
+        "besednaVrsta" : "noun",
+        "spol" : "neutral"
+    },
+    {
+        "osnOblika" : "gehen",
+        "besednaVrsta" : "verb",
+        "jeModalni" : "False",
+        "praeteritum" : "ging",
+        "partizipPerfekt" : "ist gegangen" 
+    },
+    {
+        "osnOblika" : "fahren",
+        "besednaVrsta" : "verb",
+        "jeModalni" : "False",
+        "praeteritum" : "fuhr",
+        "partizipPerfekt" : "ist gefahren" 
+    }
+]
