@@ -13,3 +13,5 @@ class Beseda():
     
     def izpis(self):
         print(f"{self.osnOblika}\n\t{self.mnozina}\n\t{self.praeteritum}")
+
+##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
