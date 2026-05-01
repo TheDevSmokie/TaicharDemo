@@ -1,6 +1,6 @@
 class Beseda():
     def __init__(self, osnOblika, mnozina=None, besednaVrsta = None, tipVeznika = None, spol = None, jeModalni = None, praeteritum = None,
-                 partizipPerfekt = None, prevod = None):
+                 partizipPerfekt = None, prevod = None, practiced = None):
         self.osnOblika = osnOblika
         self.mnozina = mnozina
         self.besednaVrsta = besednaVrsta
@@ -10,6 +10,7 @@ class Beseda():
         self.praeteritum =  praeteritum
         self.partizipPerfekt = partizipPerfekt
         self.prevod = prevod
+        self.practiced = practiced
     
     def izpis(self):
         print(f"{self.osnOblika}\n\t{self.mnozina}\n\t{self.praeteritum}")

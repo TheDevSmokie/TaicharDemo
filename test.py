@@ -1,5 +1,5 @@
 import faiss
-import numpy as np
+#import numpy as np
 import random
 from sentence_transformers import SentenceTransformer
 
@@ -21,13 +21,16 @@ class Beseda():
 
 # --- 2. The Application Logic ---
 class GrammarAwarePracticeApp:
+    #sentence-transformers/all-MiniLM-L12-v2
+    #google/embeddinggemma-300m
     def __init__(self, model_name="google/embeddinggemma-300m"):
         print("Loading Model...")
         self.model = SentenceTransformer(model_name)
         
-        # We store words in separate lists to facilitate PoS-specific searching
+        # We store words in separate lists to facilitate besedna_vrsta-specific searching
         self.pools = {
             "glagol": [],       # Verbs
+            "modalni": [],
             "samostalnik": [],  # Nouns
             "pridevnik": [],    # Adjectives
             "veznik" : []
@@ -39,32 +42,47 @@ class GrammarAwarePracticeApp:
         for b in beseda_list:
             if b.besednaVrsta in self.pools:
                 self.pools[b.besednaVrsta].append(b)
+                if b.jeModalni == True:
+                    self.pools["modalni"].append(b)
         
+        skupaj = []
         # Build a FAISS index for each category
-        for pos, words in self.pools.items():
+        for besedna_vrsta, words in self.pools.items():
             if not words: continue
-            texts = [w.osnOblika for w in words]
-            embeddings = self.model.encode(texts, normalize_embeddings=True)
             
+            texts = []
+            for w in words:
+                if w.besednaVrsta == "samostalnik" and w.spol in ["m", "f", "n"]:
+                    if(w.spol == "m"):
+                        prefix = "der"
+                    elif (w.spol == "f"):
+                        prefix = "die"
+                    elif (w.spol == "n"):
+                        prefix = "das"
+
+                    texts.append(prefix + w.osnOblika)
+                else:
+                    texts.append(w.osnOblika)
+
+            skupaj.append(texts)
+            embeddings = self.model.encode(texts, normalize_embeddings=True)
             index = faiss.IndexFlatIP(embeddings.shape[1])
             index.add(embeddings.astype('float32'))
-            self.indices[pos] = index
+            self.indices[besedna_vrsta] = index
             
-        print(f"Database built. Verbs: {len(self.pools['glagol'])}, "
-              f"Nouns: {len(self.pools['samostalnik'])}, "
-              f"Adjectives: {len(self.pools['pridevnik'])}")
+        print(f"Naloženih je {len(skupaj)} besed:\n{', \n}'.join([w for w in skupaj])}")
 
-    def _get_closest_unpracticed(self, target_vector, pos, count=1):
-        """Finds the semantically closest unpracticed words of a specific PoS."""
-        if pos not in self.indices or not self.pools[pos]:
+    def _get_closest_unpracticed(self, target_vector, besedna_vrsta, count=1):
+        """Finds the semantically closest unpracticed words of a specific besedna_vrsta."""
+        if besedna_vrsta not in self.indices or not self.pools[besedna_vrsta]:
             return []
 
         # Search for more than needed because many might be 'practiced'
-        _, indices = self.indices[pos].search(target_vector.astype('float32'), k=len(self.pools[pos]))
+        _, indices = self.indices[besedna_vrsta].search(target_vector.astype('float32'), k=len(self.pools[besedna_vrsta]))
         
         found = []
         for idx in indices[0]:
-            word = self.pools[pos][idx]
+            word = self.pools[besedna_vrsta][idx]
             if not word.practiced:
                 found.append(word)
             if len(found) >= count:
@@ -104,16 +122,15 @@ class GrammarAwarePracticeApp:
             current_group = [verb] + nouns + adjs
             prompt_str = ", ".join([b.osnOblika for b in current_group])
             
-            print(f"PROMPT: {prompt_str}")
+            print(f"BESEDE: {prompt_str}")
             # Show hints (gender/plural) to help the user form the sentence correctly
-            input("(Press any key to show hints)")
+            input("(pritisni karkoli, da se pokažejo namigi)")
             hints = [f"{b.osnOblika} ({b.spol if b.spol else b.besednaVrsta})" for b in current_group]
-            print(f"HINTS:  {', '.join(hints)}")
+            print(f"NAMIGI:  {', '.join(hints)}")
             
-            input("USER (Type sentence): ")
-            print("-" * 30)
+            input("(naprej)")
 
-        print("\n=== Session Complete! All verbs exhausted. ===")
+        print("\n=== Vaja zaključena! Glagolov je zmanjkalo... ===")
 
 # --- 3. Execution with Sample Data ---
 if __name__ == "__main__":
@@ -121,21 +138,22 @@ if __name__ == "__main__":
     # Sample Dictionary
     vocab_data = [
         # Verbs (glagol)
-        Beseda("laufen", besednaVrsta="glagol", prevod="to run"),
-        Beseda("essen", besednaVrsta="glagol", prevod="to eat"),
-        Beseda("schlafen", besednaVrsta="glagol", prevod="to sleep"),
+        Beseda(osnOblika = "laufen", besednaVrsta="glagol", prevod="to run"),
+        Beseda(osnOblika = "essen", besednaVrsta="glagol", prevod="to eat"),
+        Beseda(osnOblika = "schlafen", besednaVrsta="glagol", prevod="to sleep"),
+        Beseda(osnOblika = "können", besednaVrsta="glagol", jeModalni = True, prevod="to sleep"),
         
         # Nouns (samostalnik)
-        Beseda("der Hund", besednaVrsta="samostalnik", spol="m", mnozina="Hunde", prevod="dog"),
-        Beseda("der Apfel", besednaVrsta="samostalnik", spol="m", mnozina="Äpfel", prevod="apple"),
-        Beseda("das Bett", besednaVrsta="samostalnik", spol="n", mnozina="Betten", prevod="bed"),
-        Beseda("der Park", besednaVrsta="samostalnik", spol="m", mnozina="Parks", prevod="park"),
-        Beseda("die Pizza", besednaVrsta="samostalnik", spol="f", mnozina="Pizzen", prevod="pizza"),
+        Beseda(osnOblika = "Hund", besednaVrsta="samostalnik", spol="m", mnozina="Hunde", prevod="dog"),
+        Beseda(osnOblika = "Apfel", besednaVrsta="samostalnik", spol="m", mnozina="Äpfel", prevod="apple"),
+        Beseda(osnOblika = "Bett", besednaVrsta="samostalnik", spol="n", mnozina="Betten", prevod="bed"),
+        Beseda(osnOblika = "Park", besednaVrsta="samostalnik", spol="m", mnozina="Parks", prevod="park"),
+        Beseda(osnOblika = "Pizza", besednaVrsta="samostalnik", spol="f", mnozina="Pizzen", prevod="pizza"),
         
         # Adjectives (pridevnik)
-        Beseda("schnell", besednaVrsta="pridevnik", prevod="fast"),
-        Beseda("lecker", besednaVrsta="pridevnik", prevod="delicious"),
-        Beseda("müde", besednaVrsta="pridevnik", prevod="tired"),
+        Beseda(osnOblika = "schnell", besednaVrsta="pridevnik", prevod="fast"),
+        Beseda(osnOblika = "lecker", besednaVrsta="pridevnik", prevod="delicious"),
+        Beseda(osnOblika = "müde", besednaVrsta="pridevnik", prevod="tired"),
     ]
 
     app = GrammarAwarePracticeApp()
