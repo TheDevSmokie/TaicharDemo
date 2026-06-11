@@ -1,18 +1,14 @@
 class Beseda():
-    def __init__(self, osnOblika, mnozina=None, besednaVrsta = None, tipVeznika = None, spol = None, jeModalni = None, praeteritum = None,
-                 partizipPerfekt = None, prevod = None, practiced = None):
-        self.osnOblika = osnOblika
-        self.mnozina = mnozina
-        self.besednaVrsta = besednaVrsta
-        self.tipVeznika = tipVeznika
-        self.spol = spol
-        self.jeModalni = jeModalni
-        self.praeteritum =  praeteritum
-        self.partizipPerfekt = partizipPerfekt
-        self.prevod = prevod
-        self.practiced = practiced
-    
-    def izpis(self):
-        print(f"{self.osnOblika}\n\t{self.mnozina}\n\t{self.praeteritum}")
-
-##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
+    def __init__(self, osnovna_oblika, mnozina = None, besedna_vrsta = None, spol = None, tip_veznika = None, 
+                 je_modalni = None, praeteritum = None, partizip_perfekt = None, prevod = None, imel_tezave = None):
+        self.osnovna_oblika = osnovna_oblika 
+        self.mnozina = mnozina 
+        self.besedna_vrsta = besedna_vrsta 
+        self.spol = spol 
+        self.tip_veznika = tip_veznika 
+        self.je_modalni = je_modalni 
+        self.praeteritum = praeteritum 
+        self.partizip_perfekt = partizip_perfekt 
+        self.prevod = prevod 
+        self.imel_tezave = imel_tezave 
+        self.practiced = None

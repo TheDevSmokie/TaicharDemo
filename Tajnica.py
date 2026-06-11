@@ -1,16 +1,16 @@
-import Beseda
+import beseda
 import json
 
 class Tajnica():
-    vocabFilePath = "vocab/vocabulary.json"
-    vseBesede = []
-    def __init__(self, vocabFilePath = "vocab/vocabulary.json"):
-        self.vocabFilePath = vocabFilePath
+    vocab_file_path = "vocab/vocabulary.json"
+    vse_besede = []
+    def __init__(self, vocab_file_path = "vocab/vocabulary.json"):
+        self.vocab_file_path = vocab_file_path
         pass
 
-    def preberiBesede(self):
-        with open(self.vocabFilePath, 'r') as file:
+    def preberi_besede(self):
+        with open(self.vocab_file_path, 'r', encoding='utf-8') as file:
             besede = json.load(file)
-            for beseda in besede:
-                self.vseBesede.append(Beseda.Beseda(**beseda))
+            for vnos in besede:
+                self.vse_besede.append(beseda.Beseda(**vnos))
 

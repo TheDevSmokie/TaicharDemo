@@ -1,0 +1,63 @@
+[
+    {
+        "osnovna_oblika" : "test",
+        "mnozina" : "",
+        "besedna_vrsta" : "",
+        "spol" : "",
+        "tip_veznika" : "",
+        "je_modalni" : "",
+        "praeteritum" : "",
+        "partizip_perfekt" : "",
+        "prevod" : "",
+        "imel_tezave" : "",
+        "practiced" : ""
+    },
+    {
+    "osnovna_oblika": "Koch",
+    "mnozina": "Köche",
+    "besedna_vrsta": "samostalnik",
+    "spol": "moski",
+    "tip_veznika": "",
+    "je_modalni": "",
+    "praeteritum": "",
+    "partizip_perfekt": "",
+    "prevod": "kuhar",
+    "imel_tezave": "False"
+  },
+  {
+    "osnovna_oblika": "abwechselnd",
+    "mnozina": "",
+    "besedna_vrsta": "prislov",
+    "spol": "",
+    "tip_veznika": "",
+    "je_modalni": "",
+    "praeteritum": "",
+    "partizip_perfekt": "",
+    "prevod": "izmenično",
+    "imel_tezave": "False"
+  },
+  {
+    "osnovna_oblika": "an der Bar arbeiten",
+    "mnozina": "",
+    "besedna_vrsta": "besedna_zveza",
+    "spol": "",
+    "tip_veznika": "",
+    "je_modalni": "",
+    "praeteritum": "",
+    "partizip_perfekt": "",
+    "prevod": "delati za barom",
+    "imel_tezave": "False"
+  },
+  {
+    "osnovna_oblika": "der Gefallen",
+    "mnozina": "Gefallen",
+    "besedna_vrsta": "samostalnik",
+    "spol": "moski",
+    "tip_veznika": "",
+    "je_modalni": "",
+    "praeteritum": "",
+    "partizip_perfekt": "",
+    "prevod": "usluga",
+    "imel_tezave": "False"
+  }
+]
