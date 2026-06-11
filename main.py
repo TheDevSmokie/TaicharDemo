@@ -1,7 +1,7 @@
 import faiss
 import random
 from sentence_transformers import SentenceTransformer
-from tajnica import Tajnica
+from Tajnica import Tajnica
 
 class GrammarAwarePracticeApp:
     def __init__(self, model_name="google/embeddinggemma-300m"):
@@ -117,13 +117,11 @@ class GrammarAwarePracticeApp:
         print("\n=== Vaja zaključena! ===")
 
 if __name__ == "__main__":
-    # Standard loading logic...
     try:
         tajnica = Tajnica("vocab/vocabulary.json")
         tajnica.preberi_besede()
         besede_za_vajo = tajnica.vse_besede
     except FileNotFoundError:
-        # Fallback to local vocab_data if needed
         besede_za_vajo = [] 
 
     app = GrammarAwarePracticeApp()

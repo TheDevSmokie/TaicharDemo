@@ -1,4 +1,4 @@
-import beseda
+import Beseda
 import json
 
 class Tajnica():
@@ -12,5 +12,5 @@ class Tajnica():
         with open(self.vocab_file_path, 'r', encoding='utf-8') as file:
             besede = json.load(file)
             for vnos in besede:
-                self.vse_besede.append(beseda.Beseda(**vnos))
+                self.vse_besede.append(Beseda.Beseda(**vnos))
 
