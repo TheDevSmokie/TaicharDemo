@@ -1,0 +1,1 @@
+A command line app for practicing foreign language vocabulary. Currently set up for practicing some German with Slovenian translations. Prompts the user with vocabulary items similar in meaning. This is powered by local google/embeddinggemma-300m model for encoding text and faiss for storing and retrieving embeddings.
